@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import 'tailwindcss';
+
+/* Enables the `dark:` variant to be toggled manually via a `.dark` class on
+   <html>, instead of only following the OS-level color-scheme preference. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Brand palette, as specified: a single blue family running from deep
+     indigo-navy down to a pale lavender-tinted white. */
+  --color-ink: #171b30;
+  --color-ink-soft: #545f82;
+  --color-paper: #ede8f5;
+  --color-surface: #ffffff;
+  --color-border: #adbbda;
+  --color-border-strong: #8697c4;
+
+  --color-black: #0b0c10;
+
+  --color-chat-bg: #d8dcf0;
+
+  --color-navy-50: #ede8f5;
+  --color-navy-100: #dde2f3;
+  --color-navy-400: #7091e6;
+  --color-navy-600: #3d52a0;
+  --color-navy-700: #36488d;
+  --color-navy-900: #2b3970;
+  --color-navy-950: #23305d;
+
+  --color-gold-100: #ede8f5;
+  --color-gold-400: #adbbda;
+  --color-gold-600: #8697c4;
+
+  --color-success: #1f9d6e;
+  --color-success-soft: #e3f6ee;
+  --color-danger: #c81e2c;
+  --color-danger-soft: #fbe3e4;
+  --color-info: #3d52a0;
+
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --shadow-soft: 0 1px 2px rgba(18, 23, 58, 0.04), 0 8px 24px -12px rgba(18, 23, 58, 0.12);
+  --shadow-lifted: 0 4px 14px rgba(18, 23, 58, 0.08), 0 16px 40px -16px rgba(18, 23, 58, 0.18);
+}
+
+/* Dark mode: redefine the same tokens so every component that already uses
+   bg-paper / bg-surface / text-ink / border-border etc. adapts automatically.
+   navy-400/950 and gold-400 are left constant — self-contained brand accents
+   (buttons paired with white text, the permanently-dark hero bands) that
+   already carry their own contrast in both themes. navy-600/700 are
+   brightened here since they also double as plain link/icon/chip text and
+   hover states sitting directly on surfaces that turn dark. */
+.dark {
+  --color-ink: #eef0fb;
+  --color-ink-soft: #adbbda;
+  --color-paper: #151c36;
+  --color-surface: #1a2243;
+  --color-border: #2c3568;
+  --color-border-strong: #3d4a8a;
+
+  --color-black: #05070f;
+
+  --color-chat-bg: #12182f;
+
+  --color-navy-50: #1d274d;
+  /* --color-navy-100: #232e5c; */
+  --color-navy-600: #7091e6;
+  --color-navy-700: #5c77bd;
+  --color-navy-900: #dde2f3;
+
+  --color-gold-100: #232e5c;
+  --color-gold-600: #dde2f3;
+
+  --color-success: #34c98e;
+  --color-success-soft: #123227;
+  --color-danger: #ef5a63;
+  --color-danger-soft: #3a1518;
+  --color-info: #7091e6;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-gold-100);
+  color: var(--color-navy-900);
+}
+
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background-color: var(--color-border-strong);
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Signature element: the "thinking thread" typing indicator dots */
+@keyframes thread-pulse {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.thread-dot {
+  animation: thread-pulse 1.2s ease-in-out infinite;
+}
+.thread-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.thread-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.25s ease-out;
+}
+
+/* Scroll-reveal: elements start hidden/offset and animate in once .is-visible is toggled by IntersectionObserver */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Gentle float for hero/about art */
+@keyframes gentle-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+.animate-float {
+  animation: gentle-float 5s ease-in-out infinite;
+}
+
+/* Slow ambient pulse for background glows */
+@keyframes ambient-pulse {
+  0%,
+  100% {
+    opacity: 0.14;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.24;
+    transform: scale(1.06);
+  }
+}
+.animate-ambient-pulse {
+  animation: ambient-pulse 8s ease-in-out infinite;
+}
+
+/* 3D flip cards for counselor profiles */
+.flip-card {
+  perspective: 1200px;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+.flip-card:hover .flip-card-inner,
+.flip-card:focus-within .flip-card-inner {
+  transform: rotateY(180deg);
+}
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* FAQ accordion smooth expand */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+.faq-panel.is-open {
+  grid-template-rows: 1fr;
+}
+.faq-panel > div {
+  overflow: hidden;
+}
