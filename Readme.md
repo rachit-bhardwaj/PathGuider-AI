@@ -238,7 +238,7 @@ Collections
 <tr>
 <td align="center">
 <img src="assets/admin 2.png" width="400"><br>
-<b>LAdmin Dashboard 2</b>
+<b>Admin Dashboard 2</b>
 </td>
 
 <td align="center">
